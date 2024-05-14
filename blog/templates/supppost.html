@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Supprimer le Poste : {{ post.title}}</title>
+    <script>
+        // Fonction pour afficher une boîte de dialogue de confirmation
+        function confirmDelete() {
+            // Demande de confirmation avec une boîte de dialogue
+            var result = confirm("Êtes-vous sûr de vouloir supprimer ce poste ?");
+            // Si l'utilisateur confirme, retourne true, sinon retourne false
+            return result;
+        }
+    </script>
+</head>
+<body>
+    <h1>Supprimer le poste : {{ post.title }} ?</h1>
+    <!-- Appel de la fonction confirmDelete() lorsque le formulaire est soumis -->
+    <form method="post" onsubmit="return confirmDelete()">
+        {% csrf_token %}
+        <button type="submit">Oui, supprimer</button>
+    </form>
+</body>
+</html>

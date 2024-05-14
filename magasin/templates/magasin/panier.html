@@ -1,0 +1,184 @@
+{% extends 'magasin/bases.html' %}
+
+{% block title %} Panier - Mon Magasin {% endblock %}
+
+{% block styles %}
+<style>
+    /* Styles pour le contenu du panier */
+    .container {
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    h3 {
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    /* Styles pour les boutons d'ajout et de suppression de quantité */
+    .quantity-button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .quantity-button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Styles pour le bouton de passage à la caisse */
+    .checkout-button {
+        background-color: #28a745;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .checkout-button:hover {
+        background-color: #218838;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Contenu du panier -->
+<div class="container">
+    <h3><i class="fas fa-shopping-cart"></i> Panier</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Prix unitaire</th>
+                <th>Quantité</th>
+                <th>Prix total</th>
+            </tr>
+        </thead>
+        <tbody id="cartItems">
+            <!-- Contenu du panier sera ajouté ici dynamiquement -->
+            <!-- Exemple d'affichage des produits dans le panier -->
+            {% for item in cart %}
+            <tr>
+                <td>Produit {{ item.id }}</td>
+                <td>{{ item.prix }}</td>
+                <td>
+                    <button class="quantity-button" onclick="decrementQuantity('{{ item.id }}')">-</button>
+                    <span id="quantite-{{ item.id }}">{{ item.quantite }}</span>
+                    <button class="quantity-button" onclick="incrementQuantity('{{ item.id }}')">+</button>
+                </td>
+                <td>{{ item.prix }} * {{ item.quantite }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p>Total : <span id="total">0</span></p>
+    <button class="checkout-button" onclick="checkout()">Passer à la caisse</button>
+</div>
+
+<!-- Script JavaScript pour le panier -->
+<script>
+    let cart = []; // Tableau pour stocker les produits ajoutés au panier
+
+    function addToCart(productId, prix) {
+        // Ajoutez la logique pour ajouter le produit au panier ici
+        // Vous devrez probablement envoyer une requête AJAX pour ajouter le produit au panier côté serveur
+        cart.push({ id: productId, prix: prix, quantite: 1 }); // Ajoutez l'ID, le prix et la quantité initiale du produit au tableau du panier
+        updateCartDetails(); // Mettez à jour les détails du panier
+        alert("Produit ajouté au panier avec succès !");
+    }
+
+    function updateCartDetails() {
+        // Mise à jour de l'affichage du total dans le panier
+        const totalElement = document.getElementById('total');
+        let total = 0;
+        let cartItemsHTML = '';
+        cart.forEach(item => {
+            // Calcul du prix total pour chaque produit en multipliant le prix par la quantité
+            const prixTotal = item.prix * item.quantite;
+            total += prixTotal;
+            // Construction de la ligne du tableau HTML pour chaque produit
+            cartItemsHTML += `
+                <tr>
+                    <td>Produit ${item.id}</td>
+                    <td>${item.prix}</td>
+                    <td>
+                        <button class="quantity-button" onclick="decrementQuantity('${item.id}')">-</button>
+                        <span id="quantite-${item.id}">${item.quantite}</span>
+                        <button class="quantity-button" onclick="incrementQuantity('${item.id}')">+</button>
+                    </td>
+                    <td>${prixTotal}</td>
+                </tr>
+            `;
+        });
+        // Mettez à jour le contenu du tableau du panier et le total
+        document.getElementById('cartItems').innerHTML = cartItemsHTML;
+        totalElement.textContent = total;
+    }
+
+    function incrementQuantity(productId) {
+        // Augmente la quantité du produit correspondant dans le panier
+        const itemIndex = cart.findIndex(item => item.id === productId);
+        if (itemIndex !== -1) {
+            cart[itemIndex].quantite++;
+            updateCartDetails();
+        }
+    }
+
+    function decrementQuantity(productId) {
+        // Diminue la quantité du produit correspondant dans le panier
+        const itemIndex = cart.findIndex(item => item.id === productId);
+        if (itemIndex !== -1 && cart[itemIndex].quantite > 1) {
+            cart[itemIndex].quantite--;
+            updateCartDetails();
+        }
+    }
+
+    function checkout() {
+        // Ajoutez la logique pour passer à la caisse ici
+        // Vous pouvez afficher une facture avec les détails des produits et le total
+        alert("Passer à la caisse !");
+    }
+
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        let total = 0;
+
+        // Récupérer les données du panier depuis l'URL
+        for (const [key, value] of urlParams) {
+            if (key === 'productId') {
+                cart.push({ id: value, prix: parseFloat(urlParams.get('prix')), quantite: 1 });
+                total += parseFloat(urlParams.get('prix'));
+            }
+        }
+
+        // Mettre à jour l'affichage du panier et du total sur la page
+        updateCartDetails();
+
+        // Afficher les produits et le total sur la page
+        const totalElement = document.getElementById('total');
+        totalElement.textContent = total.toFixed(2);
+    }
+</script>
+{% endblock %}

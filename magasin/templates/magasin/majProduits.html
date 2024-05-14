@@ -1,0 +1,105 @@
+{% extends 'magasin/bases.html' %}
+
+{% block styles %}
+<style>
+    body {
+        background-color: #f8f9fa;
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #007bff;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+        width: calc(100% - 22px);
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    textarea {
+        height: 100px; /* Réduire la hauteur du champ description */
+        font-size: 14px; /* Réduire la taille de la police */
+    }
+
+    button[type="submit"] {
+        width: 100%;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Mise à jour des produits</h1>
+    <form method="post" enctype="multipart/form-data" class="form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_libelle">Libellé:</label>
+            {{ form.libelle }}
+        </div>
+        <div class="form-group">
+            <label for="id_prix">Prix:</label>
+            {{ form.prix }}
+        </div>
+        <div class="form-group">
+            <label for="id_type">Type:</label>
+            {{ form.type }}
+        </div>
+        <div class="form-group">
+            <label for="id_description">Description:</label>
+            {{ form.description }}
+        </div>
+        <div class="form-group">
+            <label for="id_fournisseur">Fournisseur:</label>
+            {{ form.fournisseur }}
+        </div>
+        <div class="form-group">
+            <label for="id_categorie">Catégorie:</label>
+            {{ form.categorie }}
+        </div>
+        <div class="form-group">
+            <label for="id_img">Image:</label>
+            {{ form.img }}
+        </div>
+        <button type="submit">Enregistrer</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'magasin/bases.html' %}
+
+{% block styles %}
+<style>
+    /* Styles spécifiques à la page de suppression */
+    .container {
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        text-align: center;
+    }
+
+    .container p {
+        margin-bottom: 20px;
+    }
+
+    .container form {
+        margin-top: 10px;
+    }
+
+    .container button[type="submit"],
+    .container a {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+    .container button[type="submit"] {
+        background-color: #dc3545;
+    }
+
+    .container a {
+        background-color: #007bff;
+    }
+
+    .container button[type="submit"]:hover,
+    .container a:hover {
+        opacity: 0.8;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Supprimer Fournisseur</h1>
+    <p>Êtes-vous sûr de vouloir supprimer le fournisseur "{{ fournisseur.nom }}"?</p>
+    <form action="/fournisseur/{{ fournisseur.id }}/supprimer" method="POST">
+        {% csrf_token %}
+        <button type="submit">Oui, Supprimer</button>
+        <a href="/liste_fournisseurs">Annuler</a>
+    </form>
+</div>
+{% endblock %}

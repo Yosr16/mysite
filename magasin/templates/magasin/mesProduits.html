@@ -1,0 +1,167 @@
+{% extends 'magasin/bases.html' %}
+
+{% block title %} Catalogue de produits {% endblock %}
+
+{% block styles %}
+<style>
+    /* Styles pour la disposition en grille */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    .product-card {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        height: 100%;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px); /* Effet de levée au survol */
+    }
+
+    .product-img {
+        width: 100%;
+        height: 200px; /* Taille fixe pour les images */
+        object-fit: cover; /* Redimensionnement de l'image pour remplir la boîte */
+        border-radius: 5px 5px 0 0;
+    }
+
+    .product-details {
+        padding: 15px;
+        height: 120px; /* Hauteur fixe pour la description */
+        overflow: hidden;
+    }
+
+    .product-details h4 {
+        margin-bottom: 10px;
+    }
+
+    .product-details p {
+        margin: 0;
+        overflow: hidden;
+        text-overflow: ellipsis; /* Tronquer le texte en cas de débordement */
+    }
+
+    /* Style pour le bouton "Ajouter au panier" */
+    .add-to-cart {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 0 0 5px 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .add-to-cart:hover {
+        background-color: #0056b3;
+    }
+
+    /* Style pour le panier */
+    #cart {
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    #cart h3 {
+        margin-top: 0;
+    }
+
+    #cart .total {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    #cart .checkout-btn {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    #cart .checkout-btn:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Panier -->
+<div id="cart" class="container mt-3">
+    <h3><i class="fas fa-shopping-cart" id="cart-icon"></i> Panier</h3>
+    <div class="total">Total : <span id="total">0.00 €</span></div>
+    <a href="{% url 'panier' %}" class="checkout-btn">Aller à la caisse</a>
+</div>
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Catalogue de produits</h2>
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card">
+            {% if product.img %}
+            <img src="{{ product.img.url }}" alt="{{ product.libelle }}" class="product-img">
+            {% else %}
+            <p>Aucune image disponible</p>
+            {% endif %}
+            <div class="product-details">
+                <h4>{{ product.libelle }}</h4>
+                <p>{{ product.description }}</p>
+                <p>{{ product.prix }}</p>
+            </div>
+            <button class="add-to-cart" onclick="addToCart('{{ product.id }}', {{ product.prix }})">Ajouter au panier</button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    let cart = []; // Tableau pour stocker les produits ajoutés au panier
+
+    function addToCart(productId, prix) {
+        // Ajoutez la logique pour ajouter le produit au panier ici
+        // Vous devrez probablement envoyer une requête AJAX pour ajouter le produit au panier côté serveur
+        cart.push({ id: productId, prix: prix, quantite: 1 }); // Ajoutez l'ID, le prix et la quantité initiale du produit au tableau du panier
+        updateCartDetails(); // Mettez à jour les détails du panier
+        alert("Produit ajouté au panier avec succès !");
+    }
+
+    function updateCartDetails() {
+        // Mise à jour de l'affichage du total dans le panier
+        const totalElement = document.getElementById('total');
+        let total = 0;
+        cart.forEach(item => {
+            // Ajoutez le prix du produit au total
+            total += item.prix;
+        });
+        // Mettez à jour le total dans le panier
+        totalElement.textContent = total.toFixed(2) + ' €';
+    }
+
+    function checkout() {
+    // Redirection vers la page de la caisse avec les données du panier
+    const params = new URLSearchParams();
+    cart.forEach(item => {
+        params.append('productId', item.id);
+        params.append('prix', item.prix);
+    });
+    window.location.href = "panier.html?" + params.toString();
+}
+
+</script>
+{% endblock %}

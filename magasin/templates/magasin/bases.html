@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Votre titre ici{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    {% block styles %}
+    <style>
+        .navbar {
+            background-color: #1272b7; /* Couleur de fond de la navbar */
+            border-bottom: 1px solid #ddd; /* Bordure inférieure de la navbar */
+            position: fixed; /* Navbar fixée en haut de la page */
+            width: 100%; /* Largeur de la navbar */
+            z-index: 1000; /* Empilement au-dessus du reste du contenu */
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem; /* Taille de police du logo/titre */
+            color: #fff; /* Couleur du texte du logo/titre */
+        }
+
+        .navbar-nav .nav-link {
+            color: #fff; /* Couleur du texte des liens */
+            margin-right: 20px; /* Espacement entre les liens */
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ffc107; /* Couleur du texte des liens au survol */
+        }
+
+        /* Style des icônes */
+        .nav-link i {
+            margin-right: 5px; /* Marge à droite des icônes */
+        }
+
+        /* Style du bouton de recherche */
+        .search-form button {
+            background-color: transparent; /* Fond transparent */
+            border: none; /* Pas de bordure */
+            outline: none; /* Pas de contour */
+            cursor: pointer; /* Curseur pointeur */
+        }
+
+        .search-form button:hover {
+            color: #ffc107; /* Couleur au survol */
+        }
+    </style>
+    {% endblock %}
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <!-- Logo/Titre de la navbar -->
+        <a class="navbar-brand" href="#">E-Commerce</a>
+
+        <!-- Bouton de menu déroulant pour les petits écrans -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Liens de navigation -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'index' %}"><i class="fas fa-home"></i> Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'catalogue' %}"><i class="fas fa-store"></i> Catalogue</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'liste_fournisseurs' %}"><i class="fas fa-truck"></i> Fournisseurs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'admin:index' %}"><i class="fas fa-cogs"></i> Administration</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'create_produit' %}"><i class="fas fa-plus"></i> Créer Produit</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'commande' %}"><i class="fas fa-shopping-cart"></i> Commande</a>
+                </li>
+            </ul>
+            <!-- Liens de navigation -->
+<div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+        
+        <!-- Autres liens de navigation... -->
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+            <span class="nav-link"><i class="fas fa-user"></i> {{ user.username }}</span>
+        </li>
+        
+            
+            
+            <li class="nav-item active">
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-link" style="border: none; background: none; cursor: pointer;"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+                </form>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Connexion</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'register' %}"><i class="fas fa-user-plus"></i> S'inscrire</a>
+            </li>
+        {% endif %}
+    </ul>
+            <!-- Formulaire de recherche -->
+            <form class="form-inline search-form" action="{% url 'recherche' %}" method="GET">
+                <input class="form-control mr-sm-2" type="search" name="q" placeholder="Recherche..."
+                       aria-label="Recherche">
+                <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    {% block content %}
+    <!-- Contenu de la page -->
+    {% endblock %}
+</div>
+
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

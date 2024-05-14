@@ -1,0 +1,45 @@
+{% extends 'magasin/bases.html' %}
+
+{% block styles %}
+<style>
+
+    
+    input[type="text"],
+    input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button[type="submit"] {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Liste des Fournisseurs</h1>
+    {% for fournisseur in fournisseurs %}
+    <div class="fournisseur">
+        <h2>{{ fournisseur.nom }}</h2>
+        <ul>
+            <li><strong>Adresse:</strong> {{ fournisseur.adresse }}</li>
+            <li><strong>Email:</strong> {{ fournisseur.email }}</li>
+        </ul>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des publications</title>
+    <!-- Intégration de Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Intégration de Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        /* Style pour la liste des publications */
+        /* Style pour chaque élément de la liste */
+        .post-list li {       
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            padding: 20px; /* Réduire le rembourrage */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Style pour le titre */
+        .post-list li h4 {
+            margin-bottom: 10px; /* Réduire l'espacement en bas du titre */
+        }
+
+        /* Style pour les boutons d'action */
+        .action-buttons .btn {
+            margin-right: 10px; /* Réduire l'espacement entre les boutons */
+            padding: 5px 10px; /* Réduire le rembourrage des boutons */
+            font-size: 14px; /* Réduire la taille de la police des boutons */
+        }
+
+        .post-list li img {
+            max-width: 100%; /* Définir une largeur maximale pour l'image */
+            height: 150px; /* Hauteur fixe pour toutes les images */
+            object-fit: cover; /* Ajuster la taille de l'image pour couvrir la hauteur fixe */
+            border-radius: 5px; /* Ajouter une bordure arrondie */
+            margin-bottom: 10px; /* Espacement en bas de l'image */
+        }
+
+        /* Centrer le contenu des cartes */
+        .post-list .card-body {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barre de navigation Bootstrap -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="#"><i class="fas fa-blog"></i> Bienvenue au Blog</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'post_list'%}"><i class="fas fa-home"></i> Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href=""><i class="fas fa-info-circle"></i> À propos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'post_create' %}"><i class="fas fa-plus-circle"></i> Nouvelle publication</a>
+                </li>
+                {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="fas fa-user"></i> {{ request.user.username }}</a>
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+                    </li>
+                    {% endif %}
+                    
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Connexion</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Liste des publications</h1>
+        <ul class="post-list">
+            {% for post in posts %}
+            <li>
+                <div class="card">
+                    <div class="card-body">
+                        <h4>{{ post.title }}</h4>
+                        <p class="mb-2"><strong>Crée à:</strong> {{ post.created_on }}</p>
+                        {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="Image" class="img-fluid post-image" data-toggle="modal" data-target="#postModal{{ post.id }}">
+                        {% endif %}
+                        <div class="action-buttons">
+                            <a href="{% url 'modifpost' pk=post.pk %}" class="btn btn-primary"><i class="fas fa-edit"></i> Modifier</a>
+                            <a href="{% url 'supppost' pk=post.pk %}" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Supprimer</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Modals pour afficher les informations supplémentaires -->
+    {% for post in posts %}
+    <div class="modal fade" id="postModal{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="postModalLabel{{ post.id }}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="postModalLabel{{ post.id }}">{{ post.title }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    
+                    <strong>Titre:</strong> {{ post.title }}<br>
+                    <strong>Slug:</strong> {{ post.slug }}<br>
+                    <strong>Auteur:</strong> {{ post.author.username }}<br>
+                    <strong>Status:</strong> {{ post.get_status_display }}<br>
+                    <strong>Crée à :</strong> {{ post.created_on }}<br>
+                    <strong>Contenu :</strong> {{ post.content }}<br>
+                    {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="Image" class="img-fluid" width="100" height="100">
+                    {% endif %}
+                    <!-- Autres informations à afficher -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <!-- Autres actions à ajouter -->
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Intégration de Bootstrap JS (optionnel pour certaines fonctionnalités) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Script JavaScript pour gérer le clic sur l'image -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const postImages = document.querySelectorAll('.post-image');
+            postImages.forEach(function(image) {
+                image.addEventListener('click', function() {
+                    const modalId = this.getAttribute('data-target');
+                    const modal = document.querySelector(modalId);
+                    $(modal).modal('show');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

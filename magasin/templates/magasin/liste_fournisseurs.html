@@ -1,0 +1,77 @@
+{% extends 'magasin/bases.html' %}
+
+{% block styles %}
+<style>
+    .container {
+        margin-top: 20px;
+    }
+
+    .fournisseur {
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .fournisseur h2 {
+        margin-top: 0;
+    }
+
+    .fournisseur ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .fournisseur ul li {
+        margin-bottom: 5px;
+    }
+
+    .btn-group {
+        margin-bottom: 20px;
+    }
+
+    .btn {
+        padding: 8px 12px;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-right: 10px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="h1">Liste des Fournisseurs</h1>
+    <div class="btn-group">
+        <button class="btn btn-primary" onclick="window.location.href='{% url 'nouveauFour' %}'">Ajouter Fournisseur</button>
+        <!-- Ajouter un bouton pour ajouter un nouveau produit -->
+    </div>
+    {% for fournisseur in fournisseurs %}
+    <div class="fournisseur">
+        <h2 class="h2">{{ fournisseur.nom }}</h2>
+        <ul class="ul">
+            <li><strong>Adresse:</strong> {{ fournisseur.adresse }}</li>
+            <li><strong>Email:</strong> {{ fournisseur.email }}</li>
+        </ul>
+        <div class="btn-group">
+          
+           
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

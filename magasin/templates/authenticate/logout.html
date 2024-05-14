@@ -1,0 +1,9 @@
+{% extends "magasin/bases.html" %}
+{% block content %}
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+<h2>Vous êtes déconnecté. </h2>
+<button type="submit">Logout</button>
+</form>
+<a href="{% url 'login' %}">Se reconnecter</a>
+{% endblock %}

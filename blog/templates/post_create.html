@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer une nouvelle publication</title>
+    <!-- Intégration de Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Intégration de Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        /* Style pour le formulaire */
+        form {
+            margin: 20px auto; /* Centrer le formulaire */
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            max-width: 600px; /* Largeur maximale du formulaire */
+        }
+
+        /* Style pour le bouton de soumission */
+        form button[type="submit"] {
+            width: 100%; /* Largeur du bouton sur toute la largeur du formulaire */
+        }
+
+        /* Style pour le titre */
+        .mtt {
+            text-align: center; /* Centrer le texte */
+            margin-top: 20px; /* Espacement en haut */
+        }
+
+        /* Style pour le navbar */
+        .navbar {
+            background-color: #007bff; /* Couleur de fond */
+        }
+
+        .navbar-brand,
+        .navbar-nav .nav-link {
+            color: #fff; /* Couleur du texte */
+        }
+
+        .navbar-brand:hover,
+        .navbar-nav .nav-link:hover {
+            color: #fff; /* Couleur du texte au survol */
+        }
+
+        /* Style pour les icônes */
+        .fa-icon {
+            margin-right: 5px; /* Espacement à droite des icônes */
+        }
+
+        /* Style pour la carte de publication */
+        .post-card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+
+        /* Style pour l'image de la publication */
+        .post-image {
+            max-width: 100%; /* Largeur maximale de l'image */
+            height: auto; /* Hauteur automatique pour conserver les proportions */
+            display: block; /* Afficher l'image en tant que bloc */
+            margin: auto; /* Centrer l'image horizontalement */
+            margin-bottom: 10px; /* Espacement en bas de l'image */
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="#">Bienvenue au Blog</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'post_list'%}">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="">À propos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'post_create' %}">Création d'une nouvelle publication</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1 class="mtt">Création d'une nouvelle publication</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary mt-3"><i class="fas fa-plus fa-icon"></i> Créer</button>
+        </form>
+    </div>
+
+    <!-- Intégration de Bootstrap JS (optionnel pour certaines fonctionnalités) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

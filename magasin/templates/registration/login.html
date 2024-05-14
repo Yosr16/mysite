@@ -1,0 +1,29 @@
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+  <div style="width: 400px; background-color: #f8f9fa; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);">
+    <h2 style="text-align: center; margin-bottom: 20px;">Se connecter</h2>
+    <form method="post">
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+          <div style="color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 5px; padding: 8px; margin-bottom: 10px;">{{ error }}</div>
+        {% endfor %}
+      {% endif %}
+      {% for field in form %}
+        <div style="margin-bottom: 15px;">
+          <label for="{{ field.id_for_label }}" style="font-weight: bold;">{{ field.label }}</label><br>
+          {{ field }}
+          {% for error in field.errors %}
+            <div style="color: #721c24; background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 5px; padding: 5px; margin-top: 5px;">{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+      <button type="submit" style="background-color: #007bff; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; width: 100%;">Se connecter</button>
+    </form>
+    <div style="text-align: center; margin-top: 20px;">
+      <small>Pas encore inscrit.e? <a href="{% url 'register' %}" style="color: #007bff; text-decoration: none;">S'inscrire</a></small><br>
+      <small>Mot de passe oublié ? <a href="#" style="color: #007bff; text-decoration: none;">Renouveler mon mot de passe</a></small>
+    </div>
+  </div>
+</div>
+{% endblock %}

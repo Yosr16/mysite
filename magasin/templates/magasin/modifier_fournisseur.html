@@ -1,0 +1,68 @@
+{% extends 'magasin/bases.html' %}
+
+{% block styles %}
+<style>
+    /* Styles spécifiques à la page de modification */
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    .h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    form {
+        margin-top: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button[type="submit"] {
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="h1">Modifier Fournisseur</h1>
+    <form method="post" enctype="multipart/form-data"">
+        {% csrf_token %}
+        <label for="nom">Nom:</label>
+        <input type="text" id="nom" name="nom" value="{{ fournisseur.nom }}" required>
+        <label for="adresse">Adresse:</label>
+        <input type="text" id="adresse" name="adresse" value="{{ fournisseur.adresse }}" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ fournisseur.email }}" required>
+        <button type="submit">Enregistrer</button>
+    </form>
+</div>
+{% endblock %}

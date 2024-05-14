@@ -1,0 +1,71 @@
+{% extends 'magasin/bases.html' %}
+
+{% block title %}Résultats de recherche{% endblock %}
+
+{% block styles %}
+<style>
+    /* Style pour la disposition en grille */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .product-card {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px); /* Effet de levée au survol */
+    }
+
+    .product-img {
+        width: 100%;
+        height: auto;
+        border-radius: 5px;
+        transition: transform 0.3s ease;
+    }
+
+    .product-img:hover {
+        transform: scale(1.05); /* Effet d'agrandissement au survol */
+    }
+
+    .product-details {
+        padding: 10px;
+    }
+
+    .product-details h4 {
+        margin-bottom: 5px;
+    }
+
+    .product-details p {
+        margin: 0;
+    }
+
+    /* Style pour l'icône de panier */
+    #cart-icon {
+        font-size: 24px;
+        margin-right: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h3>Résultats de la recherche pour "{{ query }}"</h3>
+<ul class="product-grid">
+    {% for produit in results %}
+    <li class="product-card">
+        <h2>{{ produit.libelle }}</h2>
+        <img src="{{ produit.img.url }}" alt="{{ produit.libelle }}" class="product-img">
+        <div class="product-details">
+            <p>Prix: {{ produit.prix }}</p>
+            <p>Description: {{ produit.description }}</p>
+            <button class="btn btn-primary">Acheter</button>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

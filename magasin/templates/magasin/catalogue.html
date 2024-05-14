@@ -1,0 +1,111 @@
+<!-- magasin/templates/magasin/catalogue.html -->
+{% extends 'magasin/bases.html' %}
+
+{% block title %}Catalogue{% endblock %}
+
+{% block styles %}
+<!-- Bootstrap CSS link -->
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    .card {
+        transition: transform 0.3s ease, opacity 0.3s ease;
+        height: 100%;
+        opacity: 1;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .card-text {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .details-btn {
+        margin-top: 0.5rem;
+    }
+
+    .card-details {
+        font-weight: normal;
+    }
+
+    .details-bold {
+        font-weight: bold;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    .card-animation {
+        animation: fadeIn 0.5s ease forwards;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">Catalogue</h1>
+    <div class="row">
+        {% for produit in produits %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{ produit.img.url }}" class="card-img-top" alt="{{ produit.nom }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ produit.nom }}</h5>
+                    <p class="card-text">{{ produit.description }}</p>
+                    <p class="card-text">Prix: {{ produit.prix }}</p>
+                    <button type="button" class="btn btn-primary details-btn" data-toggle="modal" data-target="#productModal{{ produit.id }}">Détails</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% for produit in produits %}
+<!-- Modale pour les détails du produit -->
+<div class="modal fade" id="productModal{{ produit.id }}" tabindex="-1" role="dialog" aria-labelledby="productModalLabel{{ produit.id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productModalLabel{{ produit.id }}">{{ produit.nom }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>{{ produit.description }}</p>
+                <p>Prix: {{ produit.prix }}</p>
+                <!-- Ajoutez d'autres détails du produit ici si nécessaire -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}
+
+{% block scripts %}
+<!-- Bootstrap JS link -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}
